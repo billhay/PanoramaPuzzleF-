@@ -98,3 +98,7 @@ module Puzzle10
                 match a &&& hd.Thumbprint with 
                 | 0u -> personTest' (a|||hd.Thumbprint) tl
                 | _ -> false
+
+    let toString (p:Person) =
+        sprintf "%10s%10s%10s%10s" (p.FirstName.ToString()) (p.LastName.ToString()) (p.Jacket.ToString()) (p.Shoes.ToString())
+         

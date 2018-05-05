@@ -113,4 +113,14 @@ type TestClass () =
         let t = [[]] |> buildlist s |> buildlist s
         Assert.AreEqual(4, t.Length);
 
+    [<TestMethod>]
+    member this.SprintfTest() =
+        let p1 = newPerson FirstName.Amanda LastName.Clark Jacket.Blue Shoes.Brown
+        let s1 = toString p1
+        printf "%s\n" s1
+        printf "%s\n" "0000000000111111111122222222223333333333"
+        printf "%s\n" "0123456789012345678901234567890123456789"
+
+        Assert.AreEqual("    Amanda     Clark      Blue     Brown", s1);
+
  
