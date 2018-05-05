@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Puzzle10\Puzzle10.fsproj" />
+    <ProjectReference Include="..\PuzzleLib\PuzzleLib.fsproj" />
   </ItemGroup>
 
 </Project>

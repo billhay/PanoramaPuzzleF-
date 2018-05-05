@@ -88,3 +88,13 @@ module Puzzle10
                 (p.FirstName = FirstName.Belinda && p.Jacket = Jacket.Green) ||
                 (p.FirstName = FirstName.Belinda && p.Shoes = Shoes.Black)
         not b
+
+    let rec personTest (x:List<Person>) = 
+        personTest' 0u x
+    and personTest' a l = 
+        match l with 
+            | [] -> true
+            | hd::tl -> 
+                match a &&& hd.Thumbprint with 
+                | 0u -> personTest' (a|||hd.Thumbprint) tl
+                | _ -> false
