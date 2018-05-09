@@ -101,4 +101,24 @@ module Puzzle10
 
     let toString (p:Person) =
         sprintf "%10s%10s%10s%10s" (p.FirstName.ToString()) (p.LastName.ToString()) (p.Jacket.ToString()) (p.Shoes.ToString())
-         
+
+    let printSolutionList (l:list<list<Person>>)  =
+        for s in l do
+            for p in s do
+                printf "%s\n" (toString p)
+            printf "\n"
+
+    /// each set of Person records has a unique id composed by or-ing together
+    /// the thumbrints of the individual members of the list. This allows us
+    /// to detect (and remove) potential solutions which differ only in the order
+    /// of their elements. so [p1;p2;p3;p4] has the same id as [p2;p3;p4;p1]
+    let rec psId (l:list<Person>) =
+        match l with 
+        |[] -> 0u
+        |h::t -> h.Thumbprint|||(psId t)
+     
+    /// this maps a list<Person> to the tupple (k, List<Person>)
+    /// for insertion into a map. k is the 'or' of the indidual 
+    /// id's
+    let personListToTupple x = ((psId x), x)
+

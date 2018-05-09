@@ -73,3 +73,14 @@ module Library
         match l with 
         |[] -> []
         |h::t -> List.append (buildlist' h ll)  (buildlist t ll)
+
+    /// This takes a list of objects, and filters out any duplicates. It takes as a parameter
+    /// a predicate of the form 'x -> 'y, where 'x is the type of object in the list, and 'y
+    /// is something that implements comperable, and is unique to an individual 'x.
+    let distinct fn = 
+        List.map fn >>   // turn value into (key, value) via function fn
+        Map.ofList >>   // now make a map of the new (k,v) list. For duplicate keys the last one is retained.
+        Map.toSeq >>    // convert the may to a (now) distinct sequence <k,v> tuples
+        Seq.map snd >>  // convert to just a sequence of <v>
+        Seq.toList      // convert back to the list
+
