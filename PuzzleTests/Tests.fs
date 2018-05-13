@@ -11,23 +11,24 @@ type TestClass () =
     [<TestMethod>]
     member this.TestThumbPrint() =
         let expected:UInt32 = 0x1111u
-        let tp = (thumbprint FirstName.Amanda LastName.Clark Jacket.Blue Shoes.Brown)
-        Assert.AreEqual(expected, tp)
+        let tp = newPerson FirstName.Amanda LastName.Clark Jacket.Blue Shoes.Brown
+        Assert.AreEqual(expected, tp.Thumbprint)
 
     [<TestMethod>] 
     member this.TestCompose() =
+        let fn = fun f p -> f p
+
         let things = 
-            [ newPerson] 
-            |> combine firstNames 
-            |> combine lastNames 
-            |> combine jackets 
-            |> combine shoes 
+            firstNames 
+            |> List.map (fun x -> newPerson x)
+            |> outerProduct fn lastNames 
+            |> outerProduct fn jackets 
+            |> outerProduct fn shoes 
 
         Assert.AreEqual(256, things.Length)
 
         let filteredList = things |> List.filter rules
         Assert.AreEqual(69, filteredList.Length);
-
 
     [<TestMethod>] 
     member this.PersonTestTrueTest() =
@@ -179,19 +180,20 @@ type TestClass () =
         let l = [s1;s2;s3;s2']
 
         printSolutionList l
-        let normalized = l |> distinct (fun v -> (id v, v)) // the lambda maps x to k, v via the id v function
+        let normalized = l |> distinct (fun v -> (psId v, v)) // the lambda maps x to k, v via the id v function
         printf "*******************************\n"
         printSolutionList normalized
         Assert.AreEqual(3, normalized.Length)
 
     [<TestMethod>]
     member this.EndToEndTest() =
+        let fn = fun f p -> f p
         let persons = 
-            [ newPerson] 
-            |> combine firstNames 
-            |> combine lastNames 
-            |> combine jackets 
-            |> combine shoes 
+            firstNames 
+            |> List.map (fun x -> newPerson x)
+            |> outerProduct fn lastNames 
+            |> outerProduct fn jackets 
+            |> outerProduct fn shoes 
 
         Assert.AreEqual(256, persons.Length)
 
@@ -239,12 +241,13 @@ type TestClass () =
 
     [<TestMethod>]
     member this.EndToEndTest'() =
+        let fn = fun f p -> f p
         let persons = 
-            [ newPerson] 
-            |> combine firstNames 
-            |> combine lastNames 
-            |> combine jackets 
-            |> combine shoes 
+            firstNames 
+            |> List.map (fun x -> newPerson x)
+            |> outerProduct fn lastNames 
+            |> outerProduct fn jackets 
+            |> outerProduct fn shoes 
 
         let filteredList = persons |> List.filter rules
         let addPerson = buildlist filteredList >> List.filter personTest >> distinct personListToTupple
@@ -257,3 +260,27 @@ type TestClass () =
         solution |> printSolutionList 
 
         Assert.AreEqual(1, solution.Length)
+
+    [<TestMethod>]
+    member this.CalculateThumbprintTest() =
+        let p1 = newPerson FirstName.Amanda LastName.Clark Jacket.Blue Shoes.Brown
+        let p2 = newPerson FirstName.Belinda LastName.Johnson Jacket.Green Shoes.Tan
+        let p3 = newPerson FirstName.Carol LastName.Meyer Jacket.Red Shoes.White
+        let p4 = newPerson FirstName.Debbie LastName.Smith Jacket.Yellow Shoes.Black
+
+        let s = [p1; p2; p3; p4]
+
+        let x = List.fold  (fun acc (p:Person) -> p.Thumbprint ||| acc) 0u s
+        printfn "%x" x
+
+        Assert.IsTrue(true)
+
+    [<TestMethod>]
+    member this.AlternativeToCombineTest() =
+        let l1 = List.map newPerson firstNames
+        let l2 = l1 |> List.map2 (fun p f -> (f p)) lastNames
+        let l3 = l2 |> List.map2 (fun p f -> (f p)) jackets
+        let l4 = l3 |> List.map2 (fun p f -> (f p)) shoes
+        Assert.AreEqual(128, l4.Length);
+
+        0

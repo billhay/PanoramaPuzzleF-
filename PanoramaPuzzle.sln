@@ -13,8 +13,6 @@ Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Puzzle10", "Puzzle10\Puzzle
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "PuzzleTests", "PuzzleTests\PuzzleTests.fsproj", "{CB82637D-6B73-42FF-9303-9552D10D3CA5}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Puzzle2", "Puzzle2\Puzzle2.fsproj", "{14D8AA37-6649-4DDC-9419-CD278F8CEC9B}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,10 +39,6 @@ Global
 		{CB82637D-6B73-42FF-9303-9552D10D3CA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CB82637D-6B73-42FF-9303-9552D10D3CA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CB82637D-6B73-42FF-9303-9552D10D3CA5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{14D8AA37-6649-4DDC-9419-CD278F8CEC9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{14D8AA37-6649-4DDC-9419-CD278F8CEC9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{14D8AA37-6649-4DDC-9419-CD278F8CEC9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{14D8AA37-6649-4DDC-9419-CD278F8CEC9B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
