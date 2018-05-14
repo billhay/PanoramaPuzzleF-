@@ -62,7 +62,7 @@ module Library
 
     /// This takes a list of objects, and filters out any duplicates. It takes as a parameter
     /// a predicate of the form 'x -> 'y, where 'x is the type of object in the list, and 'y
-    /// is something that implements comperable, and is unique to an individual 'x.
+    /// is something that implements comparable, and is unique to an individual 'x.
     let distinct fn = 
         List.map fn >>  // turn value into (key, value) via function fn
         Map.ofList >>   // now make a map of the new (k,v) list. For duplicate keys the last one is retained.

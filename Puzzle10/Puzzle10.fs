@@ -3,34 +3,34 @@ module Puzzle10
     open Library
 
     type FirstName =
-        | Amanda = 0B1
+        | Amanda  = 0B1
         | Belinda = 0B10
-        | Carol = 0B100
-        | Debbie = 0B1000
+        | Carol   = 0B100
+        | Debbie  = 0B1000
 
-    let firstNames = enumToList<FirstName>
+    let firstNames = enumToList<FirstName> 
 
     type LastName =
-        | Clark = 0B1
-        | Johnson = 0B10
-        | Meyer = 0B100
-        | Smith = 0B1000
+        | Clark   = 0B10000
+        | Johnson = 0B100000
+        | Meyer   = 0B1000000
+        | Smith   = 0B10000000
 
     let lastNames = enumToList<LastName>
 
     type Jacket =
-        | Blue = 0B1
-        | Green = 0B10
-        | Red = 0B100
-        | Yellow = 0B1000
+        | Blue   = 0B100000000
+        | Green  = 0B1000000000
+        | Red    = 0B10000000000
+        | Yellow = 0B100000000000
 
     let jackets = enumToList<Jacket>
 
     type Shoes =
-        | Brown = 0B1
-        | Tan  = 0B10
-        | White  = 0B100
-        | Black = 0B1000
+        | Brown  = 0B1000000000000
+        | Tan    = 0B10000000000000
+        | White  = 0B100000000000000
+        | Black  = 0B1000000000000000
 
     let shoes = enumToList<Shoes>
 
@@ -40,26 +40,24 @@ module Puzzle10
             LastName:LastName;
             Jacket:Jacket;
             Shoes:Shoes;
-            Thumbprint:uint32
-        }
+            Thumbprint:uint32;
+            toString:string;
+        } 
 
     let newPerson (f:FirstName) (l:LastName) (j:Jacket) (s:Shoes) : Person =
-
-        let thumbprint (f:FirstName) (l:LastName) (j:Jacket) (s:Shoes) :uint32 =
-                let fi = uint32(f)
-                let li = uint32(l) <<< 4
-                let ji = uint32(j) <<< 8
-                let si = uint32(s) <<< 12
-                fi + li + ji + si
-
+        let toString = sprintf "%10s%10s%10s%10s" (f.ToString()) (l.ToString()) (j.ToString()) (s.ToString())
         {
             FirstName = f;
             LastName = l;
             Jacket = j;
             Shoes = s;
-            Thumbprint = thumbprint f l j s
+            Thumbprint = uint32(f) + uint32(l) + uint32(j) + uint32(s);
+            toString = toString;
         }
 
+    // These are the domain specific rules, which I found easier to write backwards. So
+    // the rules say Amanda does not wear the red jacket. If it turns out she does (very first term
+    // in the list of predicates) the rules method returns 'false'
     let rules (p:Person) :bool = 
         let b = (p.FirstName = FirstName.Amanda && p.Jacket = Jacket.Red) ||
                 (p.FirstName = FirstName.Amanda && p.Shoes = Shoes.Brown) ||
@@ -92,6 +90,9 @@ module Puzzle10
                 (p.FirstName = FirstName.Belinda && p.Shoes = Shoes.Black)
         not b
 
+    // tests if a potential solution of an N Person list has each
+    // person unique - i.e. no single attribute (say FirstName)
+    // is duplicated by the other (N-1) members of the list
     let rec personTest (x:List<Person>) = 
         personTest' 0u x
     and personTest' a l = 
@@ -102,25 +103,17 @@ module Puzzle10
                 | 0u -> personTest' (a|||hd.Thumbprint) tl
                 | _ -> false
 
-    let toString (p:Person) =
-        sprintf "%10s%10s%10s%10s" (p.FirstName.ToString()) (p.LastName.ToString()) (p.Jacket.ToString()) (p.Shoes.ToString())
 
     let printSolutionList ll =
-        let printSolutionList'' l = List.iter (fun p -> printfn "%s" (toString p)) l
         ll |> List.iter (fun x -> 
-            printSolutionList'' x
+            x |> List.iter (fun (p:Person) -> printfn "%s" (p.toString))
             printfn "")
         printfn ""
 
-
-    /// each set of Person records has a unique id composed by or-ing together
-    /// the thumbrints of the individual members of the list. This allows us
-    /// to detect (and remove) potential solutions which differ only in the order
-    /// of their elements. so [p1;p2;p3;p4] has the same id as [p2;p3;p4;p1]
-    let psId (l:list<Person>) = l |> List.fold (fun a x -> a||| x.Thumbprint) 0u
-     
     /// this maps a list<Person> to the tupple (k, List<Person>)
-    /// for insertion into a map. k is the 'or' of the indidual 
+    /// for insertion into a map. k is the 'or' of the individual 
     /// id's
-    let personListToTupple x = ((psId x), x)
+    let personListToTupple x = 
+        let k = x |> List.fold (fun a x -> a||| x.Thumbprint) 0u
+        (k, x)
 

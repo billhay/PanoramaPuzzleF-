@@ -120,7 +120,7 @@ type TestClass () =
     [<TestMethod>]
     member this.SprintfTest() =
         let p1 = newPerson FirstName.Amanda LastName.Clark Jacket.Blue Shoes.Brown
-        let s1 = toString p1
+        let s1 = p1.toString
         printf "%s\n" s1
         printf "%s\n" "0000000000111111111122222222223333333333"
         printf "%s\n" "0123456789012345678901234567890123456789"
@@ -136,14 +136,14 @@ type TestClass () =
         let p4 = newPerson FirstName.Debbie LastName.Smith Jacket.Yellow Shoes.Black
         let expected = 0xffffu;
 
-        let actual = Puzzle10.psId [p1;p2;p3;p4]
+        let (actual, _) = Puzzle10.personListToTupple [p1;p2;p3;p4]
         Assert.AreEqual(expected, actual)
 
-        let actual = Puzzle10.psId [p2;p1;p4;p3]
+        let (actual, _) = Puzzle10.personListToTupple [p2;p1;p4;p3]
         Assert.AreEqual(expected, actual)
 
         let expected = 0xfbffu
-        let actual = Puzzle10.psId [p1;p2;p3';p4]
+        let (actual, _) = Puzzle10.personListToTupple [p1;p2;p3';p4]
         Assert.AreEqual(expected, actual)
 
     [<TestMethod>]
@@ -180,7 +180,7 @@ type TestClass () =
         let l = [s1;s2;s3;s2']
 
         printSolutionList l
-        let normalized = l |> distinct (fun v -> (psId v, v)) // the lambda maps x to k, v via the id v function
+        let normalized = l |> distinct (fun v -> personListToTupple v)
         printf "*******************************\n"
         printSolutionList normalized
         Assert.AreEqual(3, normalized.Length)
@@ -189,8 +189,8 @@ type TestClass () =
     member this.EndToEndTest() =
         let fn = fun f p -> f p
         let persons = 
-            firstNames 
-            |> List.map (fun x -> newPerson x)
+            [newPerson]
+            |> outerProduct fn firstNames
             |> outerProduct fn lastNames 
             |> outerProduct fn jackets 
             |> outerProduct fn shoes 
@@ -243,8 +243,8 @@ type TestClass () =
     member this.EndToEndTest'() =
         let fn = fun f p -> f p
         let persons = 
-            firstNames 
-            |> List.map (fun x -> newPerson x)
+            [newPerson]
+            |> outerProduct fn firstNames
             |> outerProduct fn lastNames 
             |> outerProduct fn jackets 
             |> outerProduct fn shoes 
@@ -273,7 +273,7 @@ type TestClass () =
         let x = List.fold  (fun acc (p:Person) -> p.Thumbprint ||| acc) 0u s
         printfn "%x" x
 
-        Assert.IsTrue(true)
+        Assert.AreEqual(0xffffu, x)
 
     [<TestMethod>]
     member this.AlternativeToCombineTest() =

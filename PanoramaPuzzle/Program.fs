@@ -7,8 +7,8 @@ let main argv =
     let fn = fun f p -> f p
 
     let persons = 
-        firstNames 
-            |> List.map (fun x -> newPerson x)
+            [newPerson]
+            |> outerProduct fn firstNames
             |> outerProduct fn lastNames 
             |> outerProduct fn jackets 
             |> outerProduct fn shoes 
