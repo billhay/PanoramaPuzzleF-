@@ -6,8 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="Puzzle10.pdf" />
     <Compile Include="Puzzle10.fs" />
   </ItemGroup>
+
+  <ItemGroup />
 
   <ItemGroup>
     <ProjectReference Include="..\PuzzleLib\PuzzleLib.fsproj" />

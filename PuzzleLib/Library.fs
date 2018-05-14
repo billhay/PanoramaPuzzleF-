@@ -6,48 +6,16 @@ module Library
 
     let enumToList<'a> = (Enum.GetValues(typeof<'a>) :?> ('a [])) |> Array.toList
 
+    // given:
+    // a:list<'a>
+    // b:list<'b>
+    // fn 'a->'b->c'
+    // this produces all permutations of a and b, with the output being
+    // whatever fn 'a 'n returns
     let rec outerProduct fn a b =
         match b with 
         |[] -> []
         |h::t -> List.append (List.map (fn h) a) (outerProduct fn a t)
-
-
-// this is an example of how this all might work
-    //let things = 
-    //    [ newPerson] 
-    //    |> combine firstNames 
-    //    |> combine lastNames 
-    //    |> combine jackets 
-    //    |> combine shoes 
-    //    |> filter rules
-
-    // test that the attributes on all people in a putative solution are unique. This is
-    // the equivalent of the c#
-    //    bool TestValidCombination(List<uint> thumbprints)
-    //    {
-    //        uint a = 0u;
-    //        foreach(uint thumbprint in thumbprints)
-    //        {
-    //           if (a & thumbprint == 0)
-    //           {
-    //               a = a | thumbprint;
-    //           }
-    //           else
-    //           {
-    //               return false;
-    //            }
-    //         }
-    //
-    //         return true;
-    //    }
-    let rec test x = 
-        test' 0u x
-    and test' a = function
-        | [] -> true
-        | hd::tl -> 
-            match a &&& hd with 
-            | 0u -> test' (a|||hd) tl
-            | _ -> false
 
     /// builds the list of person combinations. This is done via a pipeline
     let rec buildlist l ll =

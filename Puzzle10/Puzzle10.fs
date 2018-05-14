@@ -93,16 +93,16 @@ module Puzzle10
     // tests if a potential solution of an N Person list has each
     // person unique - i.e. no single attribute (say FirstName)
     // is duplicated by the other (N-1) members of the list
-    let rec personTest (x:List<Person>) = 
-        personTest' 0u x
-    and personTest' a l = 
-        match l with 
-            | [] -> true
-            | hd::tl -> 
-                match a &&& hd.Thumbprint with 
-                | 0u -> personTest' (a|||hd.Thumbprint) tl
-                | _ -> false
+    let personTest (x:List<Person>) = 
+        let rec personTest' a l = 
+            match l with 
+                | [] -> true
+                | hd::tl -> 
+                    match a &&& hd.Thumbprint with 
+                    | 0u -> personTest' (a|||hd.Thumbprint) tl
+                    | _ -> false
 
+        personTest' 0u x
 
     let printSolutionList ll =
         ll |> List.iter (fun x -> 
