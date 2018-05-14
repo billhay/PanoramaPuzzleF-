@@ -50,12 +50,12 @@ module Library
             | _ -> false
 
     /// builds the list of person combinations. This is done via a pipeline
-    let rec buildlist' a ll =
-        match ll with
-        |[] -> []
-        |h::t -> List.append [a::h] (buildlist' a t)
-
     let rec buildlist l ll =
+        let rec buildlist' a ll =
+            match ll with
+            |[] -> []
+            |h::t -> List.append [a::h] (buildlist' a t)
+
         match l with 
         |[] -> []
         |h::t -> List.append (buildlist' h ll)  (buildlist t ll)
@@ -64,9 +64,8 @@ module Library
     /// a predicate of the form 'x -> 'y, where 'x is the type of object in the list, and 'y
     /// is something that implements comperable, and is unique to an individual 'x.
     let distinct fn = 
-        List.map fn >>   // turn value into (key, value) via function fn
+        List.map fn >>  // turn value into (key, value) via function fn
         Map.ofList >>   // now make a map of the new (k,v) list. For duplicate keys the last one is retained.
-        Map.toSeq >>    // convert the may to a (now) distinct sequence <k,v> tuples
-        Seq.map snd >>  // convert to just a sequence of <v>
-        Seq.toList      // convert back to the list
+        Map.toList >>   // convert the may to a (now) distinct list of <k,v> tuples
+        List.map snd    // convert to just a list of <v>
 

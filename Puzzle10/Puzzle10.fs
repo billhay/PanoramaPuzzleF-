@@ -34,8 +34,6 @@ module Puzzle10
 
     let shoes = enumToList<Shoes>
 
-
-
     type Person =
         {
             FirstName:FirstName;
