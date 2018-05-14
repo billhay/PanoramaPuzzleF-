@@ -200,44 +200,25 @@ type TestClass () =
         let filteredList = persons |> List.filter rules
         Assert.AreEqual(69, filteredList.Length);
         printfn "Length of filteredList = %d" filteredList.Length
+        let addPerson = buildlist filteredList >> List.filter personTest >> distinct personListToTupple
 
         // adding first person
-        let l0 = filteredList |> List.map (fun p -> [p])
+        let l0 = [[]] |> addPerson
         printfn "Length of l0 = %d" l0.Length
 
-        // adding second person
-        let l1 = l0 |>buildlist filteredList
+        let l1 = l0 |> addPerson
         printfn "Length of l1 = %d" l1.Length
 
-        let l2 = l1 |> List.filter personTest
+        let l2 = l1 |> addPerson
         printfn "Length of l2 = %d" l2.Length
 
-        let l3 = l2 |> distinct personListToTupple
+        let l3 = l2 |> addPerson
         printfn "Length of l3 = %d" l3.Length
 
-        // adding third person
-        let l11 = l3 |>buildlist filteredList
-        printfn "Length of l11 = %d" l11.Length
+ 
+        l3|> printSolutionList 
 
-        let l12 = l11 |> List.filter personTest
-        printfn "Length of l12 = %d" l12.Length
-
-        let l13 = l12 |> distinct personListToTupple
-        printfn "Length of l13 = %d" l13.Length
-
-        // adding fourth person
-        let l21 = l13 |>buildlist filteredList
-        printfn "Length of l21 = %d" l21.Length
-
-        let l22 = l21 |> List.filter personTest
-        printfn "Length of l22 = %d" l22.Length
-
-        let l23 = l22 |> distinct personListToTupple
-        printfn "Length of l23 = %d" l23.Length
-        printfn ""
-        l23 |> printSolutionList 
-
-        Assert.AreEqual(1, l23.Length)
+        Assert.AreEqual(1, l3.Length)
 
     [<TestMethod>]
     member this.EndToEndTest'() =
@@ -252,11 +233,7 @@ type TestClass () =
         let filteredList = persons |> List.filter rules
         let addPerson = buildlist filteredList >> List.filter personTest >> distinct personListToTupple
 
-        // adding first person
-        let l0 = filteredList |> List.map (fun p -> [p])
-
-        // adding second person
-        let solution =   l0 |> addPerson |> addPerson |> addPerson
+        let solution =   [[]] |> addPerson |> addPerson |> addPerson |> addPerson
         solution |> printSolutionList 
 
         Assert.AreEqual(1, solution.Length)

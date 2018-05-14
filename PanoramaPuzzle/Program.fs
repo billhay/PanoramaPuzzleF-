@@ -6,6 +6,9 @@ let main argv =
 
     let fn = fun f p -> f p
 
+    let sw = new System.Diagnostics.Stopwatch()
+    sw.Start()
+
     let persons = 
             [newPerson]
             |> outerProduct fn firstNames
@@ -16,9 +19,9 @@ let main argv =
     let filteredList = persons |> List.filter rules
     let addPerson = buildlist filteredList >> List.filter personTest >> distinct personListToTupple
 
-    let l0 = filteredList |> List.map (fun p -> [p])
+    let solution =   [[]] |> addPerson |> addPerson |> addPerson |> addPerson
+    sw.Stop();
 
-    let solution =   l0 |> addPerson |> addPerson |> addPerson
     solution |> printSolutionList 
-
+    printfn "Elapsed time = %d msecs" sw.ElapsedMilliseconds
     0
